@@ -1,9 +1,9 @@
 def CalLeastCommonMultiple(x, y):
     """
     给定两个正整数x和y，求两个数的最小公倍数
-    :param x: 输入正整数1
-    :param y: 输入正整数2
-    :return: 返回二者的最小公倍数
+    :param x: 输入正整数1 [int]
+    :param y: 输入正整数2 [int]
+    :return: 返回二者的最小公倍数 [int]
     """
     for t in range(1, y+1):
         res = x * t
