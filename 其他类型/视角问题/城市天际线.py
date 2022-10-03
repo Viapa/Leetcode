@@ -35,4 +35,4 @@ def maxIncreaseKeepingSkyline(grid):
 if __name__ == "__main__":
     grid = [[3,0,8,4],[2,4,5,7],[9,2,6,3],[0,3,1,0]]
     result = maxIncreaseKeepingSkyline(grid)
-    print(f"通过计算: 在城市建筑物grid可以增加的最大高度增量总和为: {result} .")
+    print(f"通过计算: 在城市建筑物grid可以增加的最大高度增量总和为: {result}.")
