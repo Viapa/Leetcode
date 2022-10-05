@@ -36,6 +36,7 @@ def garbageCollection(garbage, travel):
     timeCost = metalNum + paperNum + glassNum + totalDistance
     return timeCost
 
+
 # 测试
 if __name__ == "__main__":
     garbage = ["G", "P", "GP", "GG"]
