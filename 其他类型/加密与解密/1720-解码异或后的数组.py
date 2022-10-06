@@ -16,7 +16,7 @@ def decode(encoded, first):
     return arr
 
 
-#测试
+# 测试
 if __name__ == "__main__":
     encoded = [6, 2, 7, 3]
     first = 4
