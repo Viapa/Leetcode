@@ -8,3 +8,25 @@ def minOperations(boxes):
     :param boxes: 二进制字符串盒子 [str]
     :return: 将所有小球移动到盒子所需的最少操作数数组 [List[int]]
     """
+    ans = [None for _ in range(len(boxes))]
+    have_ball = []
+    no_ball = []
+    for idx, s in enumerate(boxes):
+        if s == '1':
+            have_ball.append(idx)
+        else:
+            no_ball.append(idx)
+
+    for i in range(len(boxes)):
+        tmp = 0
+        for j in have_ball:
+            tmp += abs(j - i)
+        ans[i] = tmp
+
+    return ans
+
+# 测试
+if __name__ == "__main__":
+    boxes = "001011"
+    result = minOperations(boxes)
+    print(f"经过计算，将所有小球移动到盒子的最少操作数的数组为: {result} .")
