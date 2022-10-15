@@ -23,6 +23,7 @@ def permute(nums):
 
     backtrack([])
 
+    return res
 
 # 测试
 if __name__ == "__main__":
