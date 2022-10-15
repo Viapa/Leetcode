@@ -8,7 +8,7 @@ def permute(nums):
     """
     res = []
 
-    #使用回溯函数
+    # 使用回溯函数
     def backtrack(ans):
         if len(ans) == len(nums):
             res.append(ans[:])
@@ -22,7 +22,6 @@ def permute(nums):
                 ans.pop()
 
     backtrack([])
-1
 
 
 # 测试
