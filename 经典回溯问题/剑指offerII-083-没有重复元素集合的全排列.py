@@ -25,8 +25,9 @@ def permute(nums):
 
     return res
 
+
 # 测试
 if __name__ == "__main__":
-    nums = [1,2,3]
+    nums = [1, 2, 3]
     result = permute(nums)
     print(f"经过计算: 数组 {nums} 的全排列为: {result} .")
