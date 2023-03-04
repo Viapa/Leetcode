@@ -15,91 +15,78 @@ void put(int key, int value) 如果关键字 key 已经存在，则变更其�
 3、当访问一个键时，如果它存在于哈希表中，则将其移到双向链表的头部，表示它最近被使用过。
 4、当插入一个新键值对时，如果缓存已满，则删除双向链表的尾部节点，并从哈希表中删除相应的键值对。然后在双向链表的头部插入新节点，并在哈希表中添加相应的键值对。
 5、双向链表的头部节点表示最近使用的节点，尾部节点表示最近最少使用的节点。
+6、链表格式: Head -> ^ -> (5,5) -> (3,3) -> (1,1) -> ^ -> tail 
 """
+
 # 定义Node节点类
-class Node:
+class Node(object):
     def __init__(self, key=None, val=None):
-        self.key = key  # 节点名
-        self.val = val  # 节点值
-        self.prev = None  # 前序节点
+        self.key = key  # 节点的key
+        self.val = val  # 节点的value
         self.next = None  # 后续节点
+        self.prev = None  # 前序节点
 
-
-# 定义本题的LRU-Cache类
+# 定义LRU缓存类
 class LRUCache(object):
-    # 初始化类变量
     def __init__(self, capacity):
-        """
-        :type capacity: int
-        """
-        self.capacity = capacity  # 缓存表容量值
-        self.cache = dict()  # 哈希表（字典），用于记录缓存的键值对
-        self.head = Node()  # 初始化头部节点
-        self.tail = Node()  # 初始化尾部节点
-        self.head.next = self.tail  # 头节点的next指向尾节点
-        self.tail.prev = self.head  # 尾节点的prev指向头节点, 形成双向链表
+        self.capacity = capacity  # 缓存容量
+        self.cache = dict()  # 缓存Map, 键为名称key, 值为节点Node
+        self.head = Node()  # 初始化头节点
+        self.tail = Node()  # 初始化尾节点
+        self.head.next = self.tail  # 连接头尾节点
+        self.tail.prev = self.head  # 连接头尾节点
 
     def get(self, key):
-        """
-        :type key: int
-        :rtype: int
-        """
-        if key not in self.cache:  # 加入缓存中不存在key，返回-1
-            print("This key is not exists")
+        if key not in self.cache:  # 若key不存在于缓存中，返回-1
+            print(f"The key: {key} not in cache!")
             return -1
-        else:  # 若key存在，则将其对应的节点移动到双向链表的头部，并返回value值
+        else:  # 若key存在于缓存，取出对应节点node，将其移动到头部节点位置，然后返回其值
             node = self.cache[key]
             self._move_to_head(node)
-            print(f"The key: {key} is exists, with value {node.val}")
+            print(f"The key: {key} in cache, with value: {node.val}")
             return node.val
 
     def put(self, key, value):
-        """
-        :type key: int
-        :type value: int
-        :rtype: None
-        """
-        if key in self.cache:  # 假设该key已经在缓存中，那就更新节点值，并且将节点移动到链表头部
+        if key not in self.cache:  # 若key不存在于缓存中，新建一个node，并记录于hashMap
+            node = Node(key, value)
+            self.cache[key] = node
+            print(f"Create a new key: {key}")
+            self._add_to_head(node)   # 将新节点增加到头部节点（因为也是最新访问）
+            if len(self.cache) > self.capacity:  # 判断增加节点后的容量
+                del_node = self._pop_tail()   # 如果大于阈值，则删除尾部节点位置的节点
+                del self.cache[del_node.key]
+                print(f"Remove key: {del_node.key}")
+        else:  # 若已存在key，只需要更改value，并将其移动到头部节点位置
             node = self.cache[key]
-            node.val = value  # 更新节点值
-            self._move_to_head(node)  # 移动到头部
-        else:  # 假设不存在该key，新建一个node，判断此时的缓存表大小，并将存于链表尾部的节点删除并删除相应key
-            new_node = Node(key, value)
-            self.cache[key] = new_node
-            self._add_to_head(new_node)  # 同样移动到头部
-            if len(self.cache) > self.capacity:  # 判断容量
-                tail_node = self._pop_tail()  # 删除尾部节点
-                del self.cache[tail_node.key]
-                print(f"Old key: {tail_node.key} is deleted..")
-            print(f"New key: {key} is cached..")
+            node.val = value
+            print(f"The key: {node.key} is exists, change value to {value}")
+            self._move_to_head(node)
 
-    # 将已经存在的节点移动到链表头部
+    # 移动某个节点到头部位置
     def _move_to_head(self, node):
-        self._remove_node(node)  # 先删除该节点
-        self._add_to_head(node)  # 再在链表头部添加该节点
+        self._remove_node(node)  # 第一步，先删除节点所在位置
+        self._add_to_head(node)  # 第二步，添加节点到头部位置
 
-    # 删除一个节点的操作
-    def _remove_node(self, node):
-        prev = node.prev
-        next = node.next
-        prev.next = next
-        next.prev = prev  # 注意，两侧都要相连才能形成双向链表
-
-    # 将节点移动到头部
+    # 添加某个节点到头部位置
     def _add_to_head(self, node):
-        node.prev = self.head  # 将头部节点放到该节点的前置
-        node.next = self.head.next  # 将该节点的下一个节点为头部节点的下一个节点
-        self.head.next.prev = node  # 头部节点下一个节点前置为该节点
-        self.head.next = node  # 头部节点的下一个节点为该节点 （这四部就是完全将头部节点替换为node节点）
+        node.next = self.head.next
+        self.head.next.prev = node
+        node.prev = self.head
+        self.head.next = node
 
-    # 删除尾部节点
+    # 去除尾部节点位置的节点
     def _pop_tail(self):
-        node = self.tail.prev  # 取尾部节点的前一个节点并删除，实际上是保持了尾部节点不动
-        self._remove_node(node)
-        return node
+        del_node = self.tail.prev
+        self._remove_node(del_node)
+        return del_node
+
+    # 去除某个节点
+    def _remove_node(self, node):
+        node.prev.next = node.next
+        node.next.prev = node.prev
 
 
-# 测试
+# 测试功能
 if __name__ == "__main__":
     capacity = 3
     LRU = LRUCache(capacity)
@@ -109,5 +96,10 @@ if __name__ == "__main__":
     out = (8, 8)
     # test1
     LRU.put(out[0], out[1])
+    print("------------")
     # test2
     LRU.get(2)
+    print("------------")
+    # test3
+    LRU.put(3, 10)
+    LRU.put(20, 10)
