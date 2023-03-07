@@ -85,9 +85,3 @@ if __name__ == "__main__":
     arr2 = [0, 0, 0, 0]
     res2 = threeSum(arr2)
     print(res2)
-
-
-
-
-
-
