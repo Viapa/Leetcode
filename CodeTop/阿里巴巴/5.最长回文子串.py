@@ -39,11 +39,3 @@ def longestPalindrome(s):
                 start = i  # 同时也要更新最大字串的起始位置
 
     return s[start: start + max_lenth]
-
-
-
-
-
-
-s = "babad"
-print(longestPalindrome(s))
