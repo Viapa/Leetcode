@@ -27,6 +27,7 @@ class ListNode(object):
         self.val = val
         self.next = next
 
+
 class Solution(object):
     def mergeKLists(self, lists):
         if not lists:
@@ -35,12 +36,12 @@ class Solution(object):
         n = len(lists)
         if n == 1:
             return lists[0]
+        else:
+            mid = n // 2
+            left = self.mergeKLists(lists[: mid])
+            right = self.mergeKLists((lists[mid: ]))
 
-        mid = n // 2
-        left = self.mergeKLists(lists[:mid])
-        right = self.mergeKLists(lists[mid:])
-
-        return self.mergeTwoLists(left, right)
+            return self.mergeTwoLists(left, right)
 
     def mergeTwoLists(self, l1, l2):
         if not l1:
