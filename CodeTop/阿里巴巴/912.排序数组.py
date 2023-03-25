@@ -15,7 +15,7 @@ def sortArray(nums):
         pivot = nums[left]
         i, j = left, right
         while i < j:
-            while i < j and pivot < nums[j]:
+            while i < j and pivot <= nums[j]:
                 j -= 1
             nums[i] = nums[j]
             while i < j and pivot >= nums[i]:
